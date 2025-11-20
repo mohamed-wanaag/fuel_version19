@@ -14,7 +14,7 @@ build/
 *.pyc
 *.pyo
 *.conf
-odoo.conf
+/odoo.conf
 # IDE
 .vscode/
 .idea/
