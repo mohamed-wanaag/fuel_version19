@@ -1,0 +1,412 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- station.shift.type search view -->
+    <record id="station_shift_type_view_search" model="ir.ui.view">
+        <field name="name">station.shift.type.view.search</field>
+        <field name="model">station.shift.type</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="sequence"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- station.shift.type list view -->
+    <record id="station_shift_type_view_tree" model="ir.ui.view">
+        <field name="name">station.shift.type.view.list</field>
+        <field name="model">station.shift.type</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="(not active)">
+                <field name="sequence"/>
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- station.shift.type form view -->
+    <record id="station_shift_type_view_form" model="ir.ui.view">
+        <field name="name">station.shift.type.view.form</field>
+        <field name="model">station.shift.type</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- station.shift search view -->
+    <record id="station_shift_view_search" model="ir.ui.view">
+        <field name="name">station.shift.view.search</field>
+        <field name="model">station.shift</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="type_id"/>
+                <field name="date"/>
+                <field name="station_id"/>
+
+                <filter name="draft" string="Draft" domain="[('state','=', 'draft')]"/>
+                <filter name="running" string="Running" domain="[('state','=', 'running')]"/>
+                <filter name="done" string="Closed" domain="[('state','=', 'done')]"/>
+                <separator/>
+                <filter name="waiting_approval" string="To Approve" domain="[('state','=', 'waiting_approval')]"/>
+                <filter name="approved" string="To Interface" domain="[('state','=', 'approved')]"/>
+                <separator/>
+                <filter name="interfaced" string="Interfaced" domain="[('state','=', 'interfaced')]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state','=', 'cancelled')]"/>
+                <separator/>
+                <filter name="has_starting_warning" string="Sequence Gaps" domain="[('has_starting_warning', '=', True)]"/>
+                <filter name="closing_warning" string="Closed with Warning" domain="[('closing_warning', '!=', False)]"/>
+
+                <group>
+                    <filter string="Station" name="groupby_station_id" context="{'group_by':'station_id'}" />
+                    <filter string="Date" name="groupby_date" context="{'group_by':'date'}" />
+                    <filter string="Period" name="groupby_type_id" context="{'group_by':'type_id'}" />
+                    <filter string="Status" name="groupby_state" context="{'group_by':'state'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- station.shift list view -->
+    <record id="station_shift_view_tree" model="ir.ui.view">
+        <field name="name">station.shift.view.list</field>
+        <field name="model">station.shift</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="type_id"/>
+                <field name="date"/>
+                <field name="station_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- station.shift form view -->
+    <record id="station_shift_view_form" model="ir.ui.view">
+        <field name="name">station.shift.view.form</field>
+        <field name="model">station.shift</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button string="Start Shift" name="action_start" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button string="Close Shift" name="action_done" type="object" class="oe_highlight" invisible="state != 'running'"/>
+
+                    <button string="Compute Shift" name="action_compute_shift" type="object" invisible="state != 'running'"/>
+                    <button string="Request Approval" name="action_request_approval" type="object" invisible="state != 'done'"/>
+                    <button string="Approve" name="action_approve" type="object" invisible="can_approve == False or state != 'waiting_approval'" />
+                    <button string="Reject" name="action_reject" type="object" invisible="can_approve == False or state != 'waiting_approval'" />
+
+                    <button string="Move To Inprogress" name="action_move_in_progress" type="object" class="oe_secondary" invisible="is_admin == False or state != 'approved'"/>
+                    <button string="Post Transactions" name="action_post" type="object" class="oe_highlight" invisible="can_approve == False or state != 'approved'" />
+                    <button string="Reset Back" name="action_draft" type="object"  invisible="state not in ('done', 'cancelled')"/>
+                    <button string="Cancel" name="action_cancel" type="object"  invisible="state not in ('draft', 'cancelled')"/>
+                    <field name="state" widget="statusbar" options="{'clickable': True}" invisible="is_admin == False"/>
+                    <field name="state" widget="statusbar" invisible="is_admin == True" statusbar_visible="draft,running,done,interfaced"/>
+                </header>
+                <div class="alert alert-danger mb-0" role="alert" invisible="show_starting_warning == False">
+                    <field name="has_starting_warning" invisible="1"/>
+                    <field name="show_starting_warning" invisible="1"/>
+                    This shift type and date will create gaps in shifts sequences. Click here <button class="oe_link" type="object" name="action_skip_starting_warning" style="padding: 0; vertical-align: baseline;" 
+                    confirm="Warning: Proceeding may disorganize your data. If you're uncertain, click Cancel and consult your Administrator. Otherwise Click OK.">Skip this Warning</button> to allow.
+                </div>
+
+                <div class="alert alert-warning mb-0" role="alert" invisible="closing_warning == False" >
+                    <field name="closing_warning" />
+                </div>
+
+                <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="open_shift_sale_orders" class="oe_stat_button" icon="fa-pencil-square-o" type="object" invisible="state != 'interfaced'" >
+                            <field name="sales_count" widget="statinfo" string="Sales"/>
+                        </button>
+                        <button name="open_shift_transfer" class="oe_stat_button" icon="fa-exchange" type="object" invisible="state != 'interfaced'" >
+                            <field name="pickings_count" widget="statinfo" string="Stock Moves"/>
+                        </button>
+                        <button name="open_shift_entries" class="oe_stat_button" icon="fa-usd" type="object" invisible="state != 'interfaced'" >
+                            <field name="moves_count" widget="statinfo" string="Accounting Entries"/>
+                        </button>
+                        <button name="open_shift_payments" class="oe_stat_button" icon="fa-book" type="object" invisible="state != 'interfaced'" >
+                            <field name="payments_count" widget="statinfo" string="Payments"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="is_admin" invisible="1" />
+                            <field name="can_approve" invisible="1" />
+                            <field name="name"/>
+                            <field name="type_id" readonly="state != 'draft'" options="{'no_create': True, 'no_create_edit': True, 'no_edit': True, 'no_open': True}"/>
+                            <field name="company_id" />
+                            <field name="default_employee_id" options="{'no_create': True, 'no_create_edit': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="station_id" readonly="state != 'draft'" options="{'no_create': True, 'no_create_edit': True, 'no_edit': True}"/>
+                            <field name="currency_id" readonly="state != 'draft'" options="{'no_create': True, 'no_create_edit': True, 'no_edit': True, 'no_open': True}"/>
+                        </group>
+                        <group string="UN BANKED CASH">
+                            <field name="opening_balance"/>
+                            <field name="cash_collected"/>
+                            <field name="cash_banked"/>
+                            <field name="closing_balance"/>
+                        </group>
+                        <group string="PETTY CASH">
+                            <field name="petty_cash_opening" string="Opening Balance"/>
+                            <field name="petty_cash_reimbursed" string="Reimbursement"/>
+                            <field name="petty_cash_spent" string="Expenses"/>
+                            <field name="closing_petty_cash" string="Closing Balance"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="received_stock_line" string="Received Stock">
+                            <group invisible="state != 'running'">
+                                <button string="Stock From Moves" name="action_open_receiving_moves" type="object" class="oe_highlight" colspan="2"/>
+                            </group>
+                            <field name="received_stock_line" readonly="state not in ('running', 'done')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="location_id" force_save="1"/>
+                                    <field name="uom_id"/>
+                                    <field name="driver"/>
+                                    <field name="truck"/>
+                                    <field name="uom_category_id" column_invisible="True"/>
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="loaded_quantity"/>
+                                    <field name="quantity"/>
+                                    <field name="variance"/>
+                                    <field name="available_product_ids" column_invisible="1"/>
+                                    <field name="can_edit_location" column_invisible="1"/>
+                                    <field name="move_line_id" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="gun_sale_line" string="Sales By Gun">
+                            <field name="gun_sale_line" readonly="state != 'running'">
+                                <list editable="bottom" create="0" edit="1" delete="0">
+                                    <field name="gun_id" readonly="1" force_save="1" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="employee_id" required="1" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="pump" optional="show"/>
+                                    <field name="opening_reading" string="O.E.M.R" optional="hide"/>
+                                    <field name="manual_opening_reading" string="O.M.M.R" optional="hide"/>
+                                    <field name="cash_opening_reading" string="O.C.M.R" optional="hide"/>
+                                    <field name="closing_reading" string="C.E.M.R" optional="show"/>
+                                    <field name="manual_closing_reading" string="C.M.M.R" optional="show"/>
+                                    <field name="cash_closing_reading" string="C.C.M.R" optional="show"/>
+                                    <field name="reading_difference" string="VAR"/>
+                                    <field name="rtt" optional="show" groups="oo_fuel_management_system.group_station_management_manager"/>
+                                    <field name="net_sales"/>
+                                    <field name="price_unit" optional="show"/>
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="station_id" column_invisible="1" />
+                                    <field name="is_admin" column_invisible="1" />
+                                    <field name="amount" sum="Total Sales"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="tank_stock_take_line" string="Dippings">
+                            <field name="tank_stock_take_line" readonly="state != 'running'">
+                                <list editable="bottom" create="0" edit="1" delete="0">
+                                    <field name="tank_id" readonly="1" force_save="1" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="opening_qty" force_save="1"/>
+                                    <field name="received_qty"/>
+                                    <field name="sales_qty"/>
+                                    <field name="book_closing_qty"/>
+                                    <field name="closing_dip_qty"/>
+                                    <field name="variance"/>
+                                    <field name="reason"/>
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="station_id" column_invisible="1" />
+                                </list>
+                            </field>
+                        </page>
+                        <page name="dry_sale_line" string="Dry Sales">
+                            <field name="dry_sale_line" readonly="state not in ('running', 'done')" context="{'default_employee_id': default_employee_id}">
+                                <list editable="bottom" decoration-warning="stock_warning == True">
+                                    <field name="product_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="uom_category_id" column_invisible="1"/>
+                                    <field name="employee_id" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="partner_id"/>
+                                    <field name="before_quantity" force_save="1" optional="show"/>
+                                    <field name="quantity" optional="show"/>
+                                    <field name="after_quantity" optional="show"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount"/>
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="station_id" column_invisible="1" />
+                                    <field name="amount" sum="Total Sales"/>
+                                    <field name="available_product_ids" column_invisible="1"/>
+                                    <field name="stock_warning" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="credit_sale_line" string="Credit Sales">
+                            <field name="credit_sale_line" readonly="state not in ('running', 'done')">
+                                <list editable="bottom">
+                                    <field name="lpo_number"/>
+                                    <field name="invoice_no"/>
+                                    <field name="partner_id"/>
+                                    <field name="partner_ref"/>
+                                    <field name="vehicle_no"/>
+                                    <field name="vehicle_mileage"/>
+                                    <field name="product_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="uom_category_id" column_invisible="1"/>
+                                    <field name="employee_id" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount"/>
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="station_id" column_invisible="1" />
+                                    <field name="amount" sum="Total Credits"/>
+                                    <field name="available_product_ids" column_invisible="1"/>
+                                    <field name="available_partner_ids" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="direct_sale_line" string="Direct Sales">
+                            <field name="direct_sale_line" readonly="state not in ('running', 'done')">
+                                <list editable="bottom">
+                                    <field name="tank_id" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="lpo_number"/>
+                                    <field name="invoice_no"/>
+                                    <field name="partner_id"/>
+                                    <field name="partner_ref"/>
+                                    <field name="vehicle_no"/>
+                                    <field name="product_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="uom_category_id" column_invisible="1"/>
+                                    <field name="employee_id" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount"/>
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="station_id" column_invisible="1" />
+                                    <field name="amount" sum="Total Sales"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="other_sale_line" string="Other Sales">
+                            <field name="other_sale_line" readonly="state not in ('running', 'done')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="uom_category_id" column_invisible="1"/>
+                                    <field name="employee_id" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="partner_id"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount"/>
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="station_id" column_invisible="1" />
+                                    <field name="amount" sum="Total Sales"/>
+                                    <field name="available_product_ids" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                    <notebook>
+                        <page name="collection_line" string="Collections">
+                            <field name="collection_line" readonly="state not in ('running', 'done')">
+                                <list editable="bottom">
+                                    <field name="employee_id" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="partner_id"/>
+                                    <field name="name"/>
+                                    <field name="journal_id" />
+                                    <field name="company_id" column_invisible="1" />
+                                    <field name="station_id" column_invisible="1" />
+                                    <field name="amount" sum="Total Collected"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="expenses" string="Expenses">
+                            <field name="expense_line" readonly="state not in ('running', 'done')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="employee_id" options="{'no_create': True, 'no_open': True, 'no_edit': True}"/>
+                                    <field name="amount" sum="Total Sales"/>
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="station_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="petty_cash" string="Petty Cash">
+                            <field name="petty_line" readonly="state not in ('running', 'done')">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="amount" sum="Total Sales"/>
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="station_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="payments" string="Payments">
+                            <field name="payment_line" readonly="state not in ('running', 'done')" context="{'default_line_type': 'payment'}" domain="[('line_type', '=', 'payment')]">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="employee_id" required="1"/>
+                                    <field name="journal_id"/>
+                                    <field name="available_journal_ids" column_invisible="1"/>
+                                    <field name="amount" sum="Total Payments"/>
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="line_type" column_invisible="1" force_save="1"/>
+                                    <field name="station_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="banking" string="Banking">
+                            <field name="banking_line" readonly="state not in ('running', 'done')" context="{'default_line_type': 'banking'}" domain="[('line_type', '=', 'banking')]">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="journal_id"/>
+                                    <field name="available_journal_ids" column_invisible="1"/>
+                                    <field name="amount" sum="Total Banked"/>
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="line_type" column_invisible="1" force_save="1"/>
+                                    <field name="station_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page name="summary_line" string="Summary">
+                            <field name="summary_line" readonly="1">
+                                <list editable="bottom">
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="wet_quantity" string="Wet" readonly="1" sum="Total Wet Sales"/>
+                                    <field name="lubes_quantity" string="Lubes" readonly="1" sum="Total Lube Sales"/>
+                                    <field name="lpg_quantity" string="LPG" readonly="1" sum="Total LPG Sales"/>
+                                    <field name="others_quantity" string="Others" readonly="1" sum="Total Other Sales"/>
+                                    <field name="direct_sale" readonly="1" sum="Total Direct Sales" string="Direct"/>
+                                    <field name="total_sales" sum="Total Sales"/>
+                                    <field name="collections" readonly="1" sum="Total Collections"/>
+                                    <field name="credit_sales" string="Credits" readonly="1" sum="Total Credit Sales"/>
+                                    <field name="expenses" readonly="1" sum="Total Expenses"/>
+                                    <field name="expected_cash" string="EXP Cash" sum="Total Expected Cash"/>
+                                    <field name="cash_collected" string="Payments" readonly="1" sum="Total Payments"/>
+                                    <field name="variance" sum="Total Variance" string="VAR"/>
+                                    <field name="company_id" column_invisible="1" readonly="1"/>
+                                    <field name="station_id" column_invisible="1" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+            </form>
+        </field>
+    </record>
+</odoo>

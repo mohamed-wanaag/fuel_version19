@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+
+        <record id="oo_station_expense_sequence" model="ir.sequence">
+            <field name="name">Station Expense Sequence</field>
+            <field name="code">station.expense.sequence</field>
+            <field name="prefix">EXP/</field>
+            <field name="padding">5</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="False" name="company_id"/>
+        </record>
+    </data>
+
+    <!-- station.station action server -->
+    <record id="action_station_pricelists" model="ir.actions.server">
+        <field name="name">Station - Pricelist Link</field>
+        <field name="model_id" ref="model_station_station"/>
+        <field name="binding_model_id" ref="model_station_station"/>
+        <field name="state">code</field>
+        <field name="code">records.link_pricelists()</field>
+    </record>
+</odoo>

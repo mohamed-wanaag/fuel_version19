@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_proforma_invoice">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page">
+                    <!-- Header Section -->
+                    <div style="text-align: center;">
+                        <img t-att-src="'/path/to/your/logo.png'"
+                            style="width: 150px; height: auto;" />
+                        <h2>PROFORMA INVOICE</h2>
+                    </div>
+
+                    <!-- Flex container for Company Details and Banking Details -->
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-bottom: 20px;">
+
+                        <!-- Company Details - Left Column -->
+                        <div
+                            style="width: 48%; padding: 10px; border-radius: 5px;">
+                            <h3>Company Details</h3>
+                            <p>
+                                <strong>Century City Kenya</strong><br />
+                                <strong>P.O Box:</strong><br />
+                                <strong>PIN
+                                No.:</strong><br />
+                                <strong>Attn.:</strong> Mr. Soha<br />
+                                <strong>
+                                Tel:</strong><br />
+                                <strong>PO Number:</strong>
+                            </p>
+                        </div>
+
+                        <!-- Banking Details - Right Column -->
+                        <div
+                            style="width: 48%; padding: 10px; border-radius: 5px;">
+                            <h3>Banking Details</h3>
+                            <p>
+                                <strong>Bank:</strong> Diamond Trust Bank (K) Ltd<br />
+                                <strong>
+                                Branch:</strong> Nyali Branch<br />
+                                <strong>USD Acc No.:</strong>
+                                0165425002<br />
+                                <strong>KSH Acc No.:</strong> 0165425001<br />
+                                <strong>
+                                Swift:</strong> DTKEKENA </p>
+                        </div>
+                    </div>
+
+                    <!-- Table for Invoice Items -->
+                    <table class="table table-condensed"
+                        style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th style="border: 1px solid black; padding: 5px;">Description</th>
+                                <th style="border: 1px solid black; padding: 5px;">Quantity</th>
+                                <th style="border: 1px solid black; padding: 5px;">Unit</th>
+                                <th style="border: 1px solid black; padding: 5px;">Unit Price</th>
+                                <th style="border: 1px solid black; padding: 5px;">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid black; padding: 5px;">Sample
+                                    Description</td>
+                                <td style="border: 1px solid black; padding: 5px;">1</td>
+                                <td style="border: 1px solid black; padding: 5px;">Unit</td>
+                                <td style="border: 1px solid black; padding: 5px;">100.00</td>
+                                <td style="border: 1px solid black; padding: 5px;">100.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Incoterms and Totals -->
+                    <table style="width: 100%; margin-top: 20px;">
+                        <tr>
+                            <td style="width: 50%;">
+                                <p><strong>Incoterm:</strong> EXW MOMBASA</p>
+                                <p><strong>Delivery Time:</strong> Currently in stock</p>
+                                <p><strong>HS Codes:</strong> N/A</p>
+                            </td>
+                            <td style="width: 50%; text-align: right;">
+                                <p>
+                                    <strong>Subtotal:</strong>
+                                </p>
+                                <p>
+                                    <strong>16% VAT:</strong>
+                                </p>
+                                <p>
+                                    <strong>TOTAL:</strong>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- VAT Registration Number -->
+                    <p><strong>VAT Reg No.:</strong> P051472716V</p>
+
+                    <!-- Conditions -->
+                    <h3>CONDITIONS:</h3>
+                    <p>1. All prices valid for 30 days only. This PI is subject to change revocable.
+                        We are not bound by your conflicting or differing terms of business.<br />
+                        2. Prices are based on the offered quantities as stated.<br /> 3. This pro
+                        forma is subject to third-party statutory increases and exchange rates and
+                        can change without notice. </p>
+
+                    <!-- Payment Note -->
+                    <p>NOTE: THIS IS NOT A TAX INVOICE. DO NOT CLAIM VAT USING THIS PROFORMA
+                        INVOICE.<br /> VAT SHOULD ONLY BE CLAIMED AFTER THE TAX INVOICE IS ISSUED. </p>
+
+                    <!-- Payment Details -->
+                    <h3>Payment Details</h3>
+                    <p>
+                        <strong>LIPA NA MPESA:</strong> Paybill No. 643666<br />
+                        <strong>Account No.:</strong>
+                        Your Company Name </p>
+
+                    <!-- Footer Section -->
+                    <div style="text-align: center; margin-top: 20px;">
+                        <p>GEOTEXTILES EAST AFRICA LTD<br /> P.O.Box 10215-80101 Bamburi, Kenya |
+                            +254 733711 781 | info@geotextileseastafrica.com |
+                            www.geotextileseastafrica.com </p>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

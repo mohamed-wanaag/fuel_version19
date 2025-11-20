@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Define Proforma Invoice Report for Sale Order -->
+    <!-- <record id="action_report_proforma_invoice_sale" model="ir.actions.report">
+        <field name="name">Proforma Invoice</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">oo_fuel_management_system.report_proforma_invoice_sale</field>
+        <field name="binding_model_id" eval="ref('sale.model_sale_order')" />
+        <field name="print_report_name">'Proforma_Invoice_' + object.name</field>
+    </record> -->
+
+    <!-- Report for Sale Order -->
+    <record id="action_sales_order_report" model="ir.actions.report">
+        <field name="name">Sales Orders Reports</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">oo_fuel_management_system.sales_order_report</field>
+        <field name="binding_model_id" eval="ref('sale.model_sale_order')" />
+        <field name="print_report_name">'Invoice2_' + object.name</field>
+    </record>
+
+    <!-- Preview Report Action -->
+    <record id="action_preview_sales_order_report" model="ir.actions.report">
+        <field name="name">Preview Sales Order Invoice</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-html</field>  <!-- Enables preview instead of download -->
+        <field name="report_name">oo_fuel_management_system.sales_order_report</field>
+        <field name="binding_model_id" eval="ref('sale.model_sale_order')" />
+        <field name="print_report_name">'Invoice2_Preview_' + object.name</field>
+    </record>
+</odoo>

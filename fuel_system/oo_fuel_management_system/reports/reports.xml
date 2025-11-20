@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="action_report_balance_sheet_report" model="ir.actions.report">
+        <field name="name">Shift Balance Sheet</field>
+        <field name="model">station.shift</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">oo_fuel_management_system.balance_sheet_report</field>
+        <field name="report_file">oo_fuel_management_system.balance_sheet_report</field>
+        <field name="print_report_name">'%s Shift Balance Sheet' % object.name</field>
+        <field name="binding_model_id" ref="model_station_shift"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

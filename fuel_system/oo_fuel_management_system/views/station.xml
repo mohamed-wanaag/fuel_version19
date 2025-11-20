@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- station.station search view -->
+    <record id="station_station_view_search" model="ir.ui.view">
+        <field name="name">station.station.view.search</field>
+        <field name="model">station.station</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="warehouse_id"/>
+                <field name="partner_id"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- station.station list view -->
+    <record id="station_station_view_tree" model="ir.ui.view">
+        <field name="name">station.station.view.list</field>
+        <field name="model">station.station</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="warehouse_id"/>
+                <field name="partner_id"/>
+                <field name="pricelist_id"/>
+                <field name="reading_type"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- station.station form view -->
+    <record id="station_station_view_form" model="ir.ui.view">
+        <field name="name">station.station.view.form</field>
+        <field name="model">station.station</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="pricelist_id"/>
+                            <field name="cash_partner_id"/>
+                            <field name="journal_ids" widget="many2many_tags" />
+                            <field name="petty_cash_journal_id"/>
+                            <field name="unbanked_journal_id"/>
+                            <field name="operation_type_id"/>
+                            <field name="dry_stock_location_id"/>
+                        </group>
+                        <group>
+                            <field name="reading_type"/>
+                            <field name="warehouse_id"/>
+                            <field name="company_id"/>
+                            <field name="payment_mode_ids" widget="many2many_tags" />
+                            <field name="expense_journal_id"/>
+                            <field name="last_shift_id"/>
+                            <field name="last_shift_date"/>
+                            <field name="loss_account_id"/>
+                            <field name="liability_account_id"/>
+                            <field name="allowable_cash_variance"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="tanks" string="Tanks">
+                            <field name="tank_ids">
+                                <form string="Station Tanks">
+                                    <group>
+                                        <group>
+                                            <field name="name"/>
+                                            <field name="location_id"/>
+                                            <field name="product_id"/>
+                                            <field name="company_id" invisible="1"/>
+                                            <field name="allowable_variance"/>
+                                        </group>
+                                        <group>
+                                            <field name="current_volume" groups="oo_fuel_management_system.group_station_management_admin"/>
+                                            <field name="max_volume"/>
+                                            <field name="uom_id"/>
+                                            <field name="uom_category_id" invisible="1"/>
+                                            <field name="allowable_gun_variance"/>
+                                        </group>
+                                    </group>
+                                    <group string="Guns">
+                                        <field name="gun_ids" nolabel="1" colspan="2">
+                                            <list editable="bottom">
+                                                <field name="name"/>
+                                                <field name="pump"/>
+                                                <field name="product_id"/>
+                                                <field name="tank_id" column_invisible="1"/>
+                                                <field name="last_reading" string="L.E.M.R" groups="oo_fuel_management_system.group_station_management_admin"/>
+                                                <field name="last_manual_reading" string="L.M.M.R" groups="oo_fuel_management_system.group_station_management_admin"/>
+                                                <field name="last_cash_reading" string="L.C.M.R" groups="oo_fuel_management_system.group_station_management_admin"/>
+                                            </list>
+                                        </field>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page name="credit_partners" string="Credit Customers">
+                            <field name="partner_ids" nolabel="1"/>
+                        </page>
+                        <page name="station_shift_history" string="Shifts History" groups="oo_fuel_management_system.group_station_management_admin">
+                            <field name="shift_history_ids" nolabel="1">
+                                <list>
+                                    <field name="create_date" optional="show"/>
+                                    <field name="create_uid" optional="show"/>
+                                    <field name="date"/>
+                                    <field name="type_id"/>
+                                    <field name="sequence"/>
+                                    <field name="shift_id"/>
+                                    <field name="state"/>
+                                    <field name="station_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- station.tank search view -->
+    <record id="station_tank_view_search" model="ir.ui.view">
+        <field name="name">station.tank.view.search</field>
+        <field name="model">station.tank</field>
+        <field name="arch" type ="xml">
+            <search>
+                <field name="name"/>
+                <field name="station_id"/>
+                <field name="location_id"/>
+                <field name="product_id"/>
+
+                <group>
+                    <filter string="Station" name="groupby_station_id" context="{'group_by':'station_id'}" />
+                    <filter string="Stock Location" name="groupby_location_id" context="{'group_by':'location_id'}" />
+                    <filter string="Product" name="groupby_product_id" context="{'group_by':'product_id'}" />
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- station.tank list view -->
+    <record id="station_tank_view_tree" model="ir.ui.view">
+        <field name="name">station.tank.view.list</field>
+        <field name="model">station.tank</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="station_id"/>
+                <field name="location_id"/>
+                <field name="product_id"/>
+                <field name="uom_id"/>
+                <field name="uom_category_id" column_invisible="1"/>
+                <field name="current_volume"/>
+                <field name="max_volume"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- station.tank form view -->
+    <record id="station_tank_view_form" model="ir.ui.view">
+        <field name="name">station.tank.view.form</field>
+        <field name="model">station.tank</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="station_id"/>
+                            <field name="location_id"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="allowable_variance"/>
+                        </group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="uom_id"/>
+                            <field name="uom_category_id" invisible="1"/>
+                            <field name="current_volume"/>
+                            <field name="max_volume"/>
+                            <field name="allowable_gun_variance"/>
+                        </group>
+                    </group>
+                    <group string="Guns" colspan="4">
+                        <field name="gun_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="name"/>
+                                <field name="pump"/>
+                                <field name="product_id"/>
+                                <field name="last_reading" string="L.E.M.R" groups="oo_fuel_management_system.group_station_management_admin"/>
+                                <field name="last_manual_reading" string="L.M.M.R" groups="oo_fuel_management_system.group_station_management_admin"/>
+                                <field name="last_cash_reading" string="L.C.M.R" groups="oo_fuel_management_system.group_station_management_admin"/>
+                                <field name="tank_id" column_invisible="1"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

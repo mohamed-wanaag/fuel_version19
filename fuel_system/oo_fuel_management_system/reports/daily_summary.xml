@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+
+<odoo>
+
+    <template id="balance_sheet_report">
+
+        <t t-call="web.html_container">
+
+            <t t-foreach="docs" t-as="o">
+
+                <t t-call="web.external_layout">
+
+                    <div class="page">
+
+
+                        <div style="margin-top: 10px; width: 100%; text-align: center;">
+
+                            <div
+                                style="display: inline-block; width: 33%; text-align: left; padding: 0;">
+                                Date: &amp;nbsp; <span t-field="o.date" />
+
+                            </div>
+
+                            <div
+                                style="display: inline-block; width: 33%; text-align: center; padding: 0;">
+                                Shift: &amp;nbsp; <span t-field="o.name" />
+
+                            </div>
+
+                            <div
+                                style="display: inline-block; width: 33%; text-align: right; padding: 0;">
+                                Type: &amp;nbsp; <span t-field="o.type_id" />
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="margin-top: 10px;">
+
+                            <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+
+                                <thead>
+
+                                    <tr>
+
+                                        <th colspan="2"
+                                            style="text-align: center; padding: 2px; font-size: 20px; font-weight: bold;">
+                                            DAILY SALES AND STOCKS RECORD - 5. CASH SUMMARY
+
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+                                <tbody>
+
+                                    <t t-set="data" t-value="o._get_daily_summary_report()" />
+
+                                    <t t-set="bolded" t-value="data[1]" />
+
+                                    <t t-set="lines" t-value="data[0]" />
+
+                                    <t t-foreach="lines" t-as="line">
+
+                                        <tr style="text-align: left; border: none;">
+
+                                            <td style="padding: 2px 0; border: none;">
+
+                                                <t t-if="line in bolded">
+
+                                                    <span
+                                                        style="font-weight: bold; display: block; border-top: 1px solid black; border-bottom: 1px solid black; padding-top: 2px; padding-bottom: 2px;"
+                                                        t-out="line" />
+
+                                                </t>
+
+                                                <t t-else="">
+
+                                                    <span t-out="line" />
+
+                                                </t>
+
+                                            </td>
+
+                                            <td
+                                                style="text-align: right; padding: 2px 0; border: none; border-left: 1px solid black">
+
+                                                <t t-set="l_value" t-value="lines[line]" />
+
+                                                <t t-if="line in bolded">
+
+                                                    <t t-if="isinstance(l_value, float)">
+
+                                                        <span
+                                                            style="font-weight: bold; display: block; border-top: 1px solid black; border-bottom: 1px solid black; padding-top: 2px; padding-bottom: 2px;"
+                                                            t-out="'{0:,.2f}'.format(l_value)" />
+
+                                                    </t>
+
+                                                    <t t-else="">
+
+                                                        <span
+                                                            style="font-weight: bold; display: block; border-top: 1px solid black; border-bottom: 1px solid black; padding-top: 2px; padding-bottom: 2px;"
+                                                            t-out="l_value" />
+
+                                                    </t>
+
+                                                </t>
+
+                                                <t t-else="">
+
+                                                    <t t-if="isinstance(l_value, float)">
+
+                                                        <span t-out="'{0:,.2f}'.format(l_value)" />
+
+                                                    </t>
+
+                                                    <t t-else="">
+
+                                                        <span t-out="l_value" />
+
+                                                    </t>
+
+                                                </t>
+
+                                            </td>
+
+                                        </tr>
+
+                                    </t>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                        <div style="margin-top: 20px; font-size: 14px;"> PREPARED BY:
+                            _______________________________ CHECKED BY:
+                            _______________________________ <br /> REMARKS:
+                            ___________________________________________________________________________________
+
+                            </div>
+
+                    </div>
+
+                </t>
+
+            </t>
+
+        </t>
+
+    </template>
+
+</odoo>

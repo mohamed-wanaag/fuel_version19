@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <!-- station.expense search view -->
+    <record id="station_expense_view_search" model="ir.ui.view">
+        <field name="name">station.expense.view.search</field>
+        <field name="model">station.expense</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="shift_id"/>
+                <field name="station_id"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- station.expense list view -->
+    <record id="station_expense_view_tree" model="ir.ui.view">
+        <field name="name">station.expense.view.list</field>
+        <field name="model">station.expense</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="shift_id"/>
+                <field name="station_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- station.expense form view -->
+    <record id="station_expense_view_form" model="ir.ui.view">
+        <field name="name">station.expense.view.form</field>
+        <field name="model">station.expense</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="station_id"/>
+                        </group>
+                        <group>
+                            <field name="shift_id"/>
+                            <field name="company_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="expense_items" string="Items">
+                            <field name="expense_line">
+                                <list editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="amount"/>
+                                    <field name="company_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

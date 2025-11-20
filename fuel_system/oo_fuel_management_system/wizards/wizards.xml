@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    
+        <record id="oo_station_management_fms_analysis_report_form" model="ir.ui.view">
+            <field name="name">FMS Analysis</field>
+            <field name="model">fms.analysis</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="date_from" />
+                            <field name="report_type" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_to"/>
+                            <field name="station_id"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Generate Report (.xlsx)" name="action_generate_report" type="object" class="btn-primary" />
+                        <button string="Cancel" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_excel_report_form" model="ir.ui.view">
+            <field name="name">Download Report</field>
+            <field name="model">excel.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Excel Report">
+                    <sheet>
+                        <group>
+                            <field name="name" invisible="1" />
+                            <field name="report" readonly="1" filename="name" />
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="oo_station_management_receive_moves_form" model="ir.ui.view">
+            <field name="name">Shift Stock From Moves</field>
+            <field name="model">receive.move.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="picking_type_id" invisible="1"/>
+                            <field name="location_id" invisible="1"/>
+                        </group>
+                        <group string="Receive Moves">
+                            <field name="move_lines" nolabel="1" colspan="2">
+                                <list>
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="product_uom_id"/>
+                                    <field name="date"/>
+                                    <field name="picking_id"/>
+                                    <field name="picking_type_id" invisivle="1"/>
+                                    <field name="state"/>
+                                    <field name="company_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </group>
+                        <field name="shift_id" invisible="1"/>
+                    </sheet>
+                    <footer>
+                        <button string="Apply" name="action_apply" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-default" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

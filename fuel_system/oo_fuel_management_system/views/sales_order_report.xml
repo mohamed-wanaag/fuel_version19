@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="sales_order_report">
+        <t t-call="web.html_container">
+            <div class="header" style="text-align: center; margin-bottom: 20px;">
+                <h1 style="font-size: 24px; font-weight: bold;">I N V O I C E</h1>
+                <h2 style="font-size: 18px;">PALM VALLEY DEVELOPMENT LTD</h2>
+            </div>
+
+            <table style="width: 100%; margin-bottom: 15px;">
+                <tr>
+                    <td>Cust PIN No.</td>
+                    <td>P051540175C</td>
+                    <td>RO. No.</td>
+                    <td>RO 16603</td>
+                    <td>P.O. No.</td>
+                    <td>16367- MM</td>
+                </tr>
+            </table>
+
+            <table style="width: 100%; border: 1px solid black; margin-bottom: 20px;">
+                <tr>
+                    <td colspan="4" style="border: 1px solid black; padding: 5px;">
+                        BANKING DETAILS: Bank: Diamond Trust Bank (K) Ltd Branch: Nyall Branch
+                        A/c Name: Geotextiles East Africa Ltd KES A/c No. : 0165425001
+                        USD A/c No. :0165425002 Swift :DTKEKENA
+                    </td>
+                </tr>
+            </table>
+
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <thead>
+                    <tr style="border-bottom: 1px solid black;">
+                        <th style="text-align: left; padding: 8px;">Description</th>
+                        <th style="text-align: center; padding: 8px;">Quantity</th>
+                        <th style="text-align: center; padding: 8px;">Unit</th>
+                        <th style="text-align: right; padding: 8px;">Rate</th>
+                        <th style="text-align: right; padding: 8px;">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 8px;">Geocell GS 445x75mm, 1.2mm thick, 3.2mx8.35m
+                            panel, 15 Panels Transport to Site Ship To Palm Valley Estate, next
+                            to Brookhouse School Runda, Kiambu County. Moses - 0722 713 572
+                            Incoterm: EXW Mombasa HS Code: </td>
+                        <td style="text-align: center; padding: 8px;">400.8 15</td>
+                        <td style="text-align: center; padding: 8px;">sqm</td>
+                        <td style="text-align: right; padding: 8px;">525.00 1,200.00</td>
+                        <td style="text-align: right; padding: 8px;">210,420.00 18,000.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="float: right; width: 30%; margin-bottom: 20px;">
+                <div style="margin-bottom: 10px;">
+                    <span>Subtotal</span>
+                    <span style="float: right;">KES 228,420.00</span>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <span>VAT Total</span>
+                    <span style="float: right;">KES 36,547.20</span>
+                </div>
+                <div style="font-weight: bold;">
+                    <span>TOTAL</span>
+                    <span style="float: right;">KES 264,967.20</span>
+                </div>
+            </div>
+
+            <div
+                style="clear: both; margin-top: 50px; border-top: 1px solid black; padding-top: 10px;">
+                <div style="float: left;">
+                    <strong>Tax Date</strong> 18/02/2025 </div>
+                <div style="float: right;">
+                    <strong>Invoice No.</strong> 15761 </div>
+                <div style="clear: both; text-align: center; margin-top: 20px;">
+                    <strong>GEOTEXTILES EAST AFRICA LTD</strong>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

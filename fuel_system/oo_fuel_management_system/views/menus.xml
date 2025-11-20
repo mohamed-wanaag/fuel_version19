@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- station.shift action window -->
+    <record id="oo_station_management_shift_action" model="ir.actions.act_window">
+        <field name="name">Station Shifts</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">station.shift</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- hr.employee action window -->
+    <record id="oo_station_management_employee_action" model="ir.actions.act_window">
+        <field name="name">Station Employees</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[['station_ids', '!=', False]]</field>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- product.product action window -->
+    <record id="oo_station_management_product_action" model="ir.actions.act_window">
+        <field name="name">Station Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">['|', ['is_dry_stock', '=', True], ['is_wet_product', '=', True]]</field>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- sale.order action window -->
+    <record id="oo_station_management_sale_action" model="ir.actions.act_window">
+        <field name="name">Station Sales</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[['shift_id', '!=', False]]</field>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- account.payment action window -->
+    <record id="oo_station_management_payment_action" model="ir.actions.act_window">
+        <field name="name">Station Payments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[['shift_id', '!=', False]]</field>
+        <field name="context">{'default_payment_type': 'inbound'}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- station.expense action window -->
+    <record id="oo_station_management_expense_action" model="ir.actions.act_window">
+        <field name="name">Station Expenses</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">station.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- station.station action window -->
+    <record id="oo_station_management_station_action" model="ir.actions.act_window">
+        <field name="name">Stations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">station.station</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- station.tank action window -->
+    <record id="oo_station_management_tank_action" model="ir.actions.act_window">
+        <field name="name">Station Tanks</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">station.tank</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[]</field>
+        <field name="context">{'create': 0}</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- station.shift.type action window -->
+    <record id="oo_station_management_shift_type_action" model="ir.actions.act_window">
+        <field name="name">Shift Types</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">station.shift.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('active', 'in', (True, False))]</field>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="oo_station_management_wet_stock_report_action" model="ir.actions.act_window">
+        <field name="name">Wet Stock Summary</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fms.analysis</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="oo_station_management_fms_analysis_report_form" />
+        <field name="binding_model_id" ref="model_fms_analysis" />
+        <field name="context">{'default_report_type': 'wet_summary'}</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="oo_station_management_cash_flow_report_action" model="ir.actions.act_window">
+        <field name="name">Cash Summary</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fms.analysis</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="oo_station_management_fms_analysis_report_form" />
+        <field name="binding_model_id" ref="model_fms_analysis" />
+        <field name="context">{'default_report_type': 'cash_summary'}</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="oo_station_management_credit_report_action" model="ir.actions.act_window">
+        <field name="name">Credit Summary</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fms.analysis</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="oo_station_management_fms_analysis_report_form" />
+        <field name="binding_model_id" ref="model_fms_analysis" />
+        <field name="context">{'default_report_type': 'credit_summary'}</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="oo_station_management_daily_report_action" model="ir.actions.act_window">
+        <field name="name">Daily Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">fms.analysis</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="oo_station_management_fms_analysis_report_form" />
+        <field name="binding_model_id" ref="model_fms_analysis" />
+        <field name="context">{'default_report_type': 'daily_report'}</field>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="oo_station_management_receive_move_action" model="ir.actions.act_window">
+        <field name="name">Stock From Moves</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">receive.move.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="oo_station_management_receive_moves_form" />
+        <field name="binding_model_id" ref="model_receive_move_wizard" />
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="oo_station_management_menu" name="Station Management"
+        web_icon="oo_fuel_management_system,static/description/icon.png" sequence="30"
+        groups="group_station_management_officer">
+
+        <menuitem id="oo_station_management_transactions_menu" name="Transactions" sequence="1">
+            <menuitem id="oo_station_management_shift_menu" name="Shifts"
+                action="oo_station_management_shift_action" sequence="1" />
+            <menuitem id="oo_station_management_sale_menu" name="Sales"
+                action="oo_station_management_sale_action" sequence="2" />
+            <menuitem id="oo_station_management_payment_menu" name="Payments"
+                action="oo_station_management_payment_action" sequence="2" />
+            <menuitem id="oo_station_management_expense_menu" name="Station Expenses"
+                action="oo_station_management_expense_action" sequence="4" />
+        </menuitem>
+
+        <menuitem id="oo_station_management_contact_menu" name="Contacts" sequence="2">
+            <menuitem id="oo_station_management_employee_menu" name="Employees"
+                action="oo_station_management_employee_action" sequence="1" />
+        </menuitem>
+
+        <menuitem id="oo_station_management_assets_menu" name="Assets" sequence="3">
+            <menuitem id="oo_station_management_product_menu" name="Products"
+                action="oo_station_management_product_action" sequence="1" />
+            <menuitem id="oo_station_management_pricelist_menu" name="Pricelists"
+                action="product.product_pricelist_action2" sequence="2" />
+        </menuitem>
+
+        <menuitem id="oo_station_management_reporting_menu" name="Reporting" sequence="4">
+            <menuitem id="oo_station_management_wet_stock_report_menu" name="Wet Stock Summary"
+                action="oo_station_management_wet_stock_report_action" sequence="1" />
+            <menuitem id="oo_station_management_cash_summary_report_menu" name="Cash Summary"
+                action="oo_station_management_cash_flow_report_action" sequence="2" />
+            <menuitem id="oo_station_management_credut_summary_report_menu" name="Credit Summary"
+                action="oo_station_management_credit_report_action" sequence="3" />
+            <menuitem id="oo_station_management_daily_report_menu" name="Daily Report"
+                action="oo_station_management_daily_report_action" sequence="4" />
+        </menuitem>
+
+
+        <menuitem id="oo_station_management_configuration_menu" name="Configurations" sequence="5"
+            groups="group_station_management_admin">
+            <menuitem id="oo_station_management_station_menu" name="Stations" sequence="1">
+                <menuitem id="oo_station_management_station_station_menu" name="Stations"
+                    action="oo_station_management_station_action" sequence="1" />
+                <menuitem id="oo_station_management_tank_menu" name="Tanks"
+                    action="oo_station_management_tank_action" sequence="2" />
+            </menuitem>
+
+            <menuitem id="oo_station_management_shift_type_menu" name="Shift Types"
+                action="oo_station_management_shift_type_action" sequence="2" />
+        </menuitem>
+
+    </menuitem>
+
+</odoo>
